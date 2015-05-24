@@ -17,7 +17,7 @@ enum userType{
 class User{
  public:
   //Constructor
-  User(string u, string p, int i, userType t);
+  User(string u, string p, int i, userType t, fstream &eff);
   //General User Methods
   void postMessage(string message);
   void deleteMessage(int i);
@@ -36,6 +36,7 @@ class User{
   string password;
   userType type;
   vector<int> mIndexes;
+  fstream* f;
   //Loads messages or advertisements
   void load();
 };
