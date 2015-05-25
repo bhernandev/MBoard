@@ -24,8 +24,9 @@ class User{
   void viewAds();
   //Admin Methods
   void allUsers();
-  void messagesBy(string username);
-  void deleteUser(string username);
+  void viewMessage(int i);
+  void messagesBy(string user);
+  void deleteUser(string user);
   string getUName();
   string getPWord();
   int getID();

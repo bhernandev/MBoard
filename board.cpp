@@ -120,15 +120,95 @@ void User::viewAds(){
 }
 
 void User::allUsers(){
- 
+ int i = 0;
+ string s;
+ vector<string> names;
+ fin->open("userInfo.txt");
+ *fin >> s;
+ while(*fin >> s){
+  if(i%4 == 0){
+   names.push_back(s);
+  }
+  i++;
+ }
+ fin->close();
+ for(int j; j < names.size(); j++){
+  cout << names[j] << endl;
+ }
 }
 
-void User::messagesBy(string username){
- 
+void User::viewMessage(int i){
+ int count = 0;
+ string m;
+ vector<string> v;
+ fin->open("messages.txt");
+ while(count < i){
+  *fin >> m;
+  v.push_back(m);
+  count++;
+ }
+ *fin >> m;
+ fin->close();
+ cout << m << endl;
 }
 
-void User::deleteUser(string username){
+void User::messagesBy(string user){
+ int i;
+ int uID;
+ string uComp;
+ bool uExists = false;
+ vector<int> inds;
+ fin->open("userInfo.txt");
+ *fin >> uComp;
+ while(*fin >> uComp){
+  if(uComp == user){
+   uExists = true;
+   *fin >> uComp;
+   *fin >> uID; //gives us the id as an int
+  }
+ }
+ fin->close();
+ if(!uExists){
+  cout << "Error: Could not find username specified" << endl;
+ }
+ else{
+  fin->open("indexes.txt");
+  while(*fin >> i){
+   if(i == uID){
+    while(*fin >> i){
+     if(i == uID){
+      break;
+     }
+     inds.push_back(i);
+    }
+   }
+  }
+  fin->close();
+  for(int j = 0; j < inds.size(); j++){
+   viewMessage(j);
+  }
+ }
+}
 
+void User::deleteUser(string user){
+ string s;
+ vector<string> info;
+ fin->open("userInfo.txt");
+ while(*fin >> s){
+  if(s == user){
+   info.push_back("deleted");
+   for(int j = 0; j < 3; j++){
+    *fin >> s;
+    info.push_back("deleted");
+   }
+  }
+ }
+ fin->close();
+ fout->open("userInfo.txt");
+ for(int j = 0; j < info.size(); j++){
+  fout << info[i] << endl;
+ }
+ fout->close();
 }
 
 void User::load(){
@@ -141,7 +221,6 @@ void User::load(){
      break;
     }
     mIndexes.push_back(i);
-    cout << i << endl;
    }
    break;
   }

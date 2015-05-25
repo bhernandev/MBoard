@@ -24,49 +24,67 @@ void getUsername(string &username, ifstream &fin){
 
 void save(User user, ifstream &fin, ofstream &fout){
  //Saving to userInfo.txt
+ bool exists = false;
  string s;
  vector<string> all;
  fin.open("userInfo.txt");
  while(fin >> s){
+  if(s == user.getUName()){
+   exists = true;
+   break;
+  }
   all.push_back(s);
  }
  fin.close();
- fout.open("userInfo.txt");
- for(int i = 0; i < all.size(); i++){
-  fout << all[i] << endl;
+ if(!exists){
+  fout.open("userInfo.txt");
+  for(int i = 0; i < all.size(); i++){
+   fout << all[i] << endl;
+  }
+  fout << user.getUName() << endl;
+  fout << user.getPWord() << endl;
+  fout << user.getID() << endl;
+  fout << user.getType() << endl;
+  fout.close();
  }
- fout << user.getUName() << endl;
- fout << user.getPWord() << endl;
- fout << user.getID() << endl;
- fout << (int)user.getType() << endl;
- fout.close();
- all.clear();
 
  //Saving to indexes.txt
  int x;
  vector<int> ind;
- fin.open("indexes.txt");
- while(fin >> x){
-  ind.push_back(x);
-  if(x == user.getID()){
-   while(fin >> x){
-    if(x == user.getID()){
-     for(int i = 0; i < (user.getIndexes()).size(); i++){
-      ind.push_back((user.getIndexes()).at(i));
-      cout << (user.getIndexes()).at(i) << endl;
+ if(exists){
+  fin.open("indexes.txt");
+  while(fin >> x){
+   ind.push_back(x);
+   if(x == user.getID()){
+    while(fin >> x){
+     if(x == user.getID()){
+      for(int i = 0; i < (user.getIndexes()).size(); i++){
+       ind.push_back((user.getIndexes()).at(i));
+      }
      }
+     ind.push_back(x);
     }
-    ind.push_back(x);
    }
   }
+  fin.close();
+  fout.open("indexes.txt");
+  for(int i = 0; i < ind.size(); i++){
+   fout << ind[i] << endl;
+  }
+  fout.close();
  }
- fin.close();
- fout.open("indexes.txt");
- for(int i = 0; i < ind.size(); i++){
-  fout << ind[i] << endl;
-  cout << ind[i] << endl;
+ else{
+  fin.open("indexes.txt");
+  while(fin >> x){
+   ind.push_back(x);
+  }
+  fin.close();
+  fout.open("indexes.txt");
+  for(int i = 0; i < ind.size(); i++){
+   fout << ind[i] << endl;
+  }
+  fout.close();
  }
- fout.close();
 }
 
 void mainMenu(User &user){
@@ -158,8 +176,7 @@ int main(int argc, char* argv[]){
  user.postMessage("abc");
  user.postMessage("def");
  user.postMessage("g");
- //user.deleteMessage(3);
- //user.viewAll();
+ user.messagesBy("brian");
  save(user, fin, fout);
  return 0;
 }
