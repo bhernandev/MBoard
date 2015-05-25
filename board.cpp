@@ -8,7 +8,7 @@ User::User(string u, string p, int i, int t, ifstream &iff, ofstream &off){
  fin = &iff;
  fout = &off;
  vector<int>* mPoint = &mIndexes;
- load();
+ User::load();
 }
 
 void User::postMessage(string message){
@@ -31,6 +31,11 @@ void User::postMessage(string message){
 }
 
 void User::deleteMessage(int i){
+ for(int j = 0; j < mIndexes.size(); j++){
+  if(mIndexes[j] == i){
+   mIndexes.erase(mIndexes.begin() + j);
+  }
+ }
  int count = 0;
  string m;
  vector<string> v;
@@ -88,6 +93,11 @@ void User::postAd(string message, string link){
 }
 
 void User::deleteAd(int i){
+ for(int j = 0; j < mIndexes.size(); j++){
+  if(mIndexes[j] == i){
+   mIndexes.erase(mIndexes.begin() + j);
+  }
+ }
  int count = 0;
  string m;
  vector<string> v;
@@ -185,7 +195,7 @@ void User::messagesBy(string user){
   }
   fin->close();
   for(int j = 0; j < inds.size(); j++){
-   viewMessage(j);
+   viewMessage(inds[j]);
   }
  }
 }
@@ -202,11 +212,14 @@ void User::deleteUser(string user){
     info.push_back("deleted");
    }
   }
+  else{
+  info.push_back(s);
+  }
  }
  fin->close();
  fout->open("userInfo.txt");
  for(int j = 0; j < info.size(); j++){
-  fout << info[i] << endl;
+  *fout << info[j] << endl;
  }
  fout->close();
 }
@@ -222,7 +235,6 @@ void User::load(){
     }
     mIndexes.push_back(i);
    }
-   break;
   }
  }
  fin->close();

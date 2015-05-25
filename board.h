@@ -32,6 +32,7 @@ class User{
   int getID();
   int getType();
   vector<int> getIndexes();
+  void load();
  private:
   int id;
   string username;
@@ -41,7 +42,6 @@ class User{
   ifstream* fin;
   ofstream* fout;
   //Loads messages or advertisements
-  void load();
 };
 
 #endif

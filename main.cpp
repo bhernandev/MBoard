@@ -61,8 +61,9 @@ void save(User user, ifstream &fin, ofstream &fout){
       for(int i = 0; i < (user.getIndexes()).size(); i++){
        ind.push_back((user.getIndexes()).at(i));
       }
+      ind.push_back(x);
+      break;
      }
-     ind.push_back(x);
     }
    }
   }
@@ -83,12 +84,140 @@ void save(User user, ifstream &fin, ofstream &fout){
   for(int i = 0; i < ind.size(); i++){
    fout << ind[i] << endl;
   }
+  fout << user.getID() << endl;
+  for(int i = 0; i < (user.getIndexes()).size(); i++){
+   fout << (user.getIndexes()).at(i) << endl;
+  }
+  fout << user.getID() << endl;
   fout.close();
  }
 }
 
-void mainMenu(User &user){
-
+void mainMenu(User &user, ifstream &fin, ofstream &fout){
+ user.load();
+ int i = user.getType();
+ bool exit = false;
+ char c;
+ while(!exit){
+  cout << endl << endl << endl;
+  cout << "e - Exit the program" << endl;
+  switch(i){
+   case 0:
+    cout << "a - Show all users" << endl;
+    cout << "b - Show messages by a specific user" << endl;
+    cout << "c - Delete a specific user" << endl;
+    cin >> c;
+      if(c == 'a'){
+       user.allUsers();
+      }
+      else if(c == 'b'){
+       string sb;
+       cout << "Enter the username of the user whose messages are to be viewed" << endl;
+       cin >> sb;
+       user.messagesBy(sb);
+      }
+      else if(c == 'c'){
+       string sc;
+       cout << "Enter the username of the user to be deleted" << endl;
+       cin >> sc;
+       user.deleteUser(sc);
+      }
+      else if(c == 'e'){
+       exit = true;
+      }
+      else{
+       cout << "Incorrect input" << endl;
+      }
+    break;
+   case 1:
+    cout << "a - Post new advertisement" << endl;
+    cout << "b - Delete previous advertisement" << endl;
+    cout << "c - View all advertisements" << endl;
+    cin >> c;
+     if(c == 'a'){
+      string s1, s2;
+      cout << "Please enter the message for the advertisement" << endl;
+      cin >> s1;
+      cout << "Please enter the link to be included in the advertisement" << endl;
+      cin >> s2;
+      user.postAd(s1, s2);
+     }
+     else if(c == 'b'){
+      int i;
+      cout << "The indexes of the advertisements that you have posted are ";
+      for(int j = 0; j < (user.getIndexes()).size(); j++){
+       cout << (user.getIndexes()).at(j) << " ";
+      }
+      cout << endl << "Please input the index of the message to be deleted" << endl;
+      cin >> i;
+      bool possession = false;
+      for(int j = 0; j < (user.getIndexes()).size(); j++){
+       if(i == ((user.getIndexes()).at(j))){
+        possession = true;
+       }
+      }
+      if(possession == true){
+       user.deleteAd(i);
+      }
+      else{
+       cout << "You were not the creator of specified advertisement" << endl;
+      }
+     }
+     else if(c == 'c'){
+      user.viewAds();
+     }
+     else if(c == 'e'){
+      exit = true;
+     }
+     else{ 
+      cout << "Incorrect input" << endl;
+     }
+    break;
+   case 2:
+    cout << "a - Post new message" << endl;
+    cout << "b - Delete previous message" << endl;
+    cout << "c - View all messages" << endl;
+    cin >> c;
+     if(c == 'a'){
+      string s1, s2;
+      cout << "Please enter the message for the message board" << endl;
+      cin >> s1;
+      user.postMessage(s1);
+     }
+     else if(c == 'b'){
+      int i;
+      cout << "The indexes of the messages that you have posted are ";
+      for(int j = 0; j < (user.getIndexes()).size(); j++){
+       cout << (user.getIndexes()).at(j) << " ";
+      }
+      cout << endl << "Please input the index of the message to be deleted" << endl;
+      cin >> i;
+      bool possession = false;
+      for(int j = 0; j < (user.getIndexes()).size(); j++){
+       if(i == ((user.getIndexes()).at(j))){
+        possession = true;
+       }
+      }
+      if(possession == true){
+       user.deleteMessage(i);
+      }
+      else{
+       cout << "You were not the creator of specified message" << endl;
+      }
+     }
+     else if(c == 'c'){
+      user.viewAll();
+     }
+     else if(c == 'e'){
+      exit = true;
+     }
+     else{ 
+      cout << "Incorrect input" << endl;
+     }
+    break;
+  }
+ }
+ save(user, fin, fout);  
 }
 
 int main(int argc, char* argv[]){
@@ -116,7 +245,7 @@ int main(int argc, char* argv[]){
    //Unique user ID creation
    string s;
    vector<string> info;
-   fin.open("userInfo");
+   fin.open("userInfo.txt");
    int n;
    fin >> n;
    id = n + 1000;
@@ -126,10 +255,10 @@ int main(int argc, char* argv[]){
    }
    fin.close();
    //Writing everything back
-   fout.open("userInfo");
-   fout << n;
+   fout.open("userInfo.txt");
+   fout << n << endl;
    for(int i = 0; i < info.size(); i++){
-    fout << info[i];
+    fout << info[i] << endl;
    }
    fout.close();
    char c;
@@ -173,10 +302,7 @@ int main(int argc, char* argv[]){
   }
  }
  User user(username, password, id, type, fin, fout);
- user.postMessage("abc");
- user.postMessage("def");
- user.postMessage("g");
- user.messagesBy("brian");
+ mainMenu(user, fin, fout);
  save(user, fin, fout);
  return 0;
 }
