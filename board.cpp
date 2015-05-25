@@ -1,12 +1,13 @@
 #include "board.h"
 
-User::User(string u, string p, int i, userType t, ifstream &iff, ofstream &off){
+User::User(string u, string p, int i, int t, ifstream &iff, ofstream &off){
  id = i;
  username = u;
  password = p;
  type = t;
  fin = &iff;
  fout = &off;
+ vector<int>* mPoint = &mIndexes;
  load();
 }
 
@@ -146,4 +147,24 @@ void User::load(){
   }
  }
  fin->close();
+}
+
+string User::getUName(){
+ return username;
+}
+
+string User::getPWord(){
+ return password;
+}
+
+int User::getID(){
+ return id;
+}
+
+int User::getType(){
+ return type;
+}
+
+vector<int> User::getIndexes(){
+ return mIndexes;
 }

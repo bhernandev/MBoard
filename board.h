@@ -8,16 +8,12 @@
 
 using namespace std;
 
-enum userType{
- admin,
- business,
- general
-};
+//usertype 0 = admin, usertype 1 = business, usertype 2 = general user
 
 class User{
  public:
   //Constructor
-  User(string u, string p, int i, userType t, ifstream &iff, ofstream &off);
+  User(string u, string p, int i, int t, ifstream &iff, ofstream &off);
   //General User Methods
   void postMessage(string message);
   void deleteMessage(int i);
@@ -30,11 +26,16 @@ class User{
   void allUsers();
   void messagesBy(string username);
   void deleteUser(string username);
+  string getUName();
+  string getPWord();
+  int getID();
+  int getType();
+  vector<int> getIndexes();
  private:
   int id;
   string username;
   string password;
-  userType type;
+  int type;
   vector<int> mIndexes;
   ifstream* fin;
   ofstream* fout;

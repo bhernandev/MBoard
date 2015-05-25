@@ -20,10 +20,53 @@ void getUsername(string &username, ifstream &fin){
   cout << "Please enter an unused username please" << endl;
   cin >> username;
  }
-} 
+}
 
-void save(User user){
+void save(User user, ifstream &fin, ofstream &fout){
+ //Saving to userInfo.txt
+ string s;
+ vector<string> all;
+ fin.open("userInfo.txt");
+ while(fin >> s){
+  all.push_back(s);
+ }
+ fin.close();
+ fout.open("userInfo.txt");
+ for(int i = 0; i < all.size(); i++){
+  fout << all[i] << endl;
+ }
+ fout << user.getUName() << endl;
+ fout << user.getPWord() << endl;
+ fout << user.getID() << endl;
+ fout << (int)user.getType() << endl;
+ fout.close();
+ all.clear();
 
+ //Saving to indexes.txt
+ int x;
+ vector<int> ind;
+ fin.open("indexes.txt");
+ while(fin >> x){
+  ind.push_back(x);
+  if(x == user.getID()){
+   while(fin >> x){
+    if(x == user.getID()){
+     for(int i = 0; i < (user.getIndexes()).size(); i++){
+      ind.push_back((user.getIndexes()).at(i));
+      cout << (user.getIndexes()).at(i) << endl;
+     }
+    }
+    ind.push_back(x);
+   }
+  }
+ }
+ fin.close();
+ fout.open("indexes.txt");
+ for(int i = 0; i < ind.size(); i++){
+  fout << ind[i] << endl;
+  cout << ind[i] << endl;
+ }
+ fout.close();
 }
 
 void mainMenu(User &user){
@@ -39,7 +82,7 @@ int main(int argc, char* argv[]){
  string username;
  string password;
  int id;
- userType type;
+ int type;
  if(argc != 3){
   cout << "Error: Must enter username and password after program call" << endl;
   cout << "Example: ./main username password" << endl << endl;
@@ -75,10 +118,10 @@ int main(int argc, char* argv[]){
    cout << "Please enter 'y' if you would like this to be a business account" << endl;
    cin >> c;
    if(c == 'y'){
-    type = business;
+    type = 1; //business
    }
    else{
-    type = general;
+    type = 2; //general
    }
   }
   else{
@@ -87,6 +130,29 @@ int main(int argc, char* argv[]){
   }
  }
  else{
+  bool found = false;
+  string s;
+  fin.open("userInfo.txt");
+  while(fin >> s){
+   if(s == a1){
+    fin >> s;
+    if(s == a2){
+     found = true;
+     username = a1;
+     password = a2;
+     fin >> id;
+     fin >> type;
+    }
+    else{
+     cout << "Entered password is incorrect" << endl;
+     return 1;
+    }
+   }
+  }
+  if(!found){
+   cout << "Entered username does not exist" << endl;
+   return 1;
+  }
  }
  User user(username, password, id, type, fin, fout);
  user.postMessage("abc");
@@ -94,5 +160,6 @@ int main(int argc, char* argv[]){
  user.postMessage("g");
  //user.deleteMessage(3);
  //user.viewAll();
+ save(user, fin, fout);
  return 0;
 }

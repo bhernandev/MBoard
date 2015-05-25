@@ -1,1 +1,13 @@
-10
+3
+brian
+hernandez
+1000
+0
+fundam
+gundam
+1001
+1
+bhernandez
+mango
+1002
+2
