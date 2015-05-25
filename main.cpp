@@ -1,5 +1,13 @@
-#include "board.cpp"
-using namespace std;
+#include "board.h"
 
-main(int argc, char* argv[]){
+int main(int argc, char* argv[]){
+ ifstream fin;
+ ofstream fout;
+ User user("Bhernandez-cs", "mangoes", 777, general, fin, fout);
+ user.postMessage("abc");
+ user.postMessage("def");
+ user.postMessage("g");
+ user.deleteMessage(3);
+ user.viewAll();
+ return 0;
 }

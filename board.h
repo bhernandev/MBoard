@@ -1,5 +1,5 @@
-#ifndef MBOARD
-#define MBOARD
+#ifndef BOARD_H
+#define BOARD_H
 
 #include <iostream>
 #include <fstream>
@@ -17,7 +17,7 @@ enum userType{
 class User{
  public:
   //Constructor
-  User(string u, string p, int i, userType t, fstream &eff);
+  User(string u, string p, int i, userType t, ifstream &iff, ofstream &off);
   //General User Methods
   void postMessage(string message);
   void deleteMessage(int i);
@@ -36,7 +36,8 @@ class User{
   string password;
   userType type;
   vector<int> mIndexes;
-  fstream* f;
+  ifstream* fin;
+  ofstream* fout;
   //Loads messages or advertisements
   void load();
 };
